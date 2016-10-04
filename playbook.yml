@@ -1,0 +1,8 @@
+---
+# file: playbook.yml
+- hosts: wordpress
+  roles:
+  - server
+  - php
+  - mysql
+  - wordpress
