@@ -1,6 +1,8 @@
 ---
 # file: playbook.yml
 - hosts: wordpress
+  remote_user: ricky
+  become: yes
   roles:
   - server
   - php
