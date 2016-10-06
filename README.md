@@ -13,12 +13,12 @@ Create text file for storing encryption key then encrypt your sudo password. In 
       ansible-vault encrypt host_vars/wordpress-ubuntu --vault-password-file ~/.vault_pass.txt
 
 
-** *Note* **
+***Note***
 If you want to decrypt ``host_vars/wordpress-ubuntu``, type:
 
     ansible-vault decrypt host_vars/wordpress-ubuntu --vault-password-file ~/.vault_pass.txt
 
-Execute your playbook
+### Execute your playbook
 
     ansible-playbook playbook.yml -i hosts --vault-password-file ~/.vault_pass.txt
 
