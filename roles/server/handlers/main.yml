@@ -1,2 +1,12 @@
 ---
 # handlers file for server
+- name: check_apache
+  stat: path=/etc/init.d/apache2
+  register: service_status
+
+- name: stop_apache
+  service: name=apache2 state=stopped
+  when: service_status.stat.exists
+
+- name: start_nginx
+  service: name=nginx state=started

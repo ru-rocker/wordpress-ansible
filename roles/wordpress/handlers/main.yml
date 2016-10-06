@@ -1,2 +1,4 @@
 ---
 # handlers file for wordpress
+- name: restart_nginx
+  service: name=nginx state=restarted

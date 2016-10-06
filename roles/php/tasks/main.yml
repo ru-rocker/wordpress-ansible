@@ -1,2 +1,23 @@
 ---
 # tasks file for php
+- name: Install php extensions
+  apt: name={{ item }} state=present
+  become: yes
+  with_items:
+    - php5-gd
+    - libssh2-php
+
+- name: checking whether cgi.fix_pathinfo value is 1
+  command: awk '/^;cgi.fix_pathinfo=1$/' /etc/php5/fpm/php.ini
+  register: check_cgi_fixpath
+
+- name: securing php processor by fixing cgi.fix_pathinfo
+  lineinfile:
+    dest=/etc/php5/fpm/php.ini
+    regexp="^;cgi.fix_pathinfo=1$"
+    state=present
+    line="cgi.fix_pathinfo=0"
+  when: check_cgi_fixpath.stdout | match(";cgi.fix_pathinfo=1")
+  notify:
+    - restart_php_fpm
+  become: yes

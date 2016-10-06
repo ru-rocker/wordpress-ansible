@@ -1,2 +1,37 @@
 ---
 # tasks file for wordpress
+- name: Download WordPress
+  get_url:
+    url=https://wordpress.org/latest.tar.gz
+    dest=/tmp/wordpress.tar.gz
+    validate_certs=no
+  become: yes
+
+- name: Extract downloaded wordpress
+  unarchive:
+    src=/tmp/wordpress.tar.gz
+    dest=/usr/share/nginx/
+    copy=no
+
+- name: update default nginx site
+  template:
+    dest=/etc/nginx/sites-enabled/default
+    src=nginx.wordpress.conf.j2
+  notify:
+    - restart_nginx
+  become: yes
+
+- name: Copy sample config file
+  command: mv /usr/share/nginx/wordpress/wp-config-sample.php /usr/share/nginx/wordpress/wp-config.php creates=/usr/share/nginx/wordpress/wp-config.php
+  become: yes
+
+- name: Update WordPress config file
+  lineinfile:
+    dest=/usr/share/nginx/wordpress/wp-config.php
+    regexp="{{ item.regexp }}"
+    line="{{ item.line }}"
+  with_items:
+    - {'regexp': "define\\('DB_NAME', '(.)+'\\);", 'line': "define('DB_NAME', '{{wp_mysql_db}}');"}
+    - {'regexp': "define\\('DB_USER', '(.)+'\\);", 'line': "define('DB_USER', '{{wp_mysql_user}}');"}
+    - {'regexp': "define\\('DB_PASSWORD', '(.)+'\\);", 'line': "define('DB_PASSWORD', '{{wp_mysql_password}}');"}
+  become: yes

@@ -1,2 +1,21 @@
 ---
 # tasks file for server
+- name: Update apt cache
+  apt: update_cache=yes cache_valid_time=3600
+  become: yes
+
+- name: Install required software
+  apt: name={{ item }} state=present
+  notify:
+    - check_apache #needed because in my server apache2 is already installed
+    - stop_apache
+    - start_nginx
+  become: yes
+  with_items:
+    - nginx
+    - mysql-server
+    - php5-mysql
+    - php5
+    - php5-fpm
+    - php5-mcrypt
+    - python-mysqldb
