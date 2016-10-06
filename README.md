@@ -1,7 +1,7 @@
 # wordpress-ansible
 
 ### Generate ssh key:
-TODO: brief description
+TODO: brief description for generating purpose
 
     ssh-copy-id -i ~/ssh/id_rsa.pub user@hostname
 
