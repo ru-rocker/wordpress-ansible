@@ -1,2 +1,3 @@
 ---
 # defaults file for wordpress
+WORDPRESS_HOME: /opt/wordpress/

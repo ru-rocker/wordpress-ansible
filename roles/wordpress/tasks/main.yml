@@ -10,24 +10,29 @@
 - name: Extract downloaded wordpress
   unarchive:
     src=/tmp/wordpress.tar.gz
-    dest=/usr/share/nginx/
+    dest=/opt/
     copy=no
 
-- name: update default nginx site
+- name: Add group "wordpress"
+  group: name=wordpress
+
+- name: Add user "wordpress"
+  user: name=wordpress group=wordpress home={{ WORDPRESS_HOME }}
+
+- name: Copy nginx configuration for wordpress
   template:
-    dest=/etc/nginx/sites-enabled/default
     src=nginx.wordpress.conf.j2
-  notify:
-    - restart_nginx
+    dest=/etc/nginx/sites-available/default
+  notify: restart_nginx
   become: yes
 
 - name: Copy sample config file
-  command: mv /usr/share/nginx/wordpress/wp-config-sample.php /usr/share/nginx/wordpress/wp-config.php creates=/usr/share/nginx/wordpress/wp-config.php
+  command: mv {{ WORDPRESS_HOME }}/wp-config-sample.php {{ WORDPRESS_HOME }}/wp-config.php creates={{ WORDPRESS_HOME }}/wp-config.php
   become: yes
 
 - name: Update WordPress config file
   lineinfile:
-    dest=/usr/share/nginx/wordpress/wp-config.php
+    dest={{ WORDPRESS_HOME }}/wp-config.php
     regexp="{{ item.regexp }}"
     line="{{ item.line }}"
   with_items:
@@ -35,3 +40,8 @@
     - {'regexp': "define\\('DB_USER', '(.)+'\\);", 'line': "define('DB_USER', '{{wp_mysql_user}}');"}
     - {'regexp': "define\\('DB_PASSWORD', '(.)+'\\);", 'line': "define('DB_PASSWORD', '{{wp_mysql_password}}');"}
   become: yes
+
+- name: Change ownership of WordPress installation
+  file: path={{ WORDPRESS_HOME }} owner=wordpress group=wordpress state=directory recurse=yes
+  become: yes
+  notify: restart_php_fpm
