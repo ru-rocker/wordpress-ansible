@@ -13,12 +13,6 @@
     dest=/opt/
     copy=no
 
-- name: Add group "wordpress"
-  group: name=wordpress
-
-- name: Add user "wordpress"
-  user: name=wordpress group=wordpress home={{ WORDPRESS_HOME }}
-
 - name: Copy nginx configuration for wordpress
   template:
     src=nginx.wordpress.conf.j2
@@ -42,6 +36,6 @@
   become: yes
 
 - name: Change ownership of WordPress installation
-  file: path={{ WORDPRESS_HOME }} owner=wordpress group=wordpress state=directory recurse=yes
+  file: path={{ WORDPRESS_HOME }} owner=www-data group=www-data state=directory recurse=yes
   become: yes
   notify: restart_php_fpm

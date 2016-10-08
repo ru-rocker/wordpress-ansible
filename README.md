@@ -4,7 +4,7 @@ The linux server distribution is based on Ubuntu 14.04 and Ansible version 2.1.2
 
 ## Writing Playbook
 ### Generate ssh key:
-TODO: brief description for generating purpose
+Use locally available keys to authorize logins on a remote machine
 
     ssh-copy-id -i ~/ssh/id_rsa.pub user@hostname
 
