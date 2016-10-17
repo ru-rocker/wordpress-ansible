@@ -4,16 +4,22 @@
   apt: name={{ item }} state=present
   become: yes
   with_items:
-    - php5-gd
-    - libssh2-php
+    - php7.0-gd
+    - php7.0-curl
+    - php7.0-cli
+    - php7.0-cgi
+    - php7.0-json
+    - php7.0-cgi
+    - php7.0-common
+    - php-ssh2
 
 - name: checking whether cgi.fix_pathinfo value is 1
-  command: awk '/^;cgi.fix_pathinfo=1$/' /etc/php5/fpm/php.ini
+  command: awk '/^;cgi.fix_pathinfo=1$/' /etc/php/7.0/fpm/php.ini
   register: check_cgi_fixpath
 
 - name: securing php processor by fixing cgi.fix_pathinfo
   lineinfile:
-    dest=/etc/php5/fpm/php.ini
+    dest=/etc/php/7.0/fpm/php.ini
     regexp="^;cgi.fix_pathinfo=1$"
     state=present
     line="cgi.fix_pathinfo=0"

@@ -14,8 +14,8 @@
   with_items:
     - nginx
     - mysql-server
-    - php5-mysql
-    - php5
-    - php5-fpm
-    - php5-mcrypt
+    - php7.0-mysql
+    - php7.0
+    - php7.0-fpm
+    - php7.0-mcrypt
     - python-mysqldb
