@@ -1,6 +1,9 @@
 # wordpress-ansible
 This playbook is intended to install Wordpress application based on LEMP (Linux, EngineX, MySQL and PHP).
-The linux server distribution is based on Ubuntu 14.04 and Ansible version 2.1.2.0
+
+The linux server distribution is based on Ubuntu 16.04 and Ansible version 2.1.2.0
+
+For Ubuntu 14.04 version, you can see on branch WordpressUbuntu14.04
 
 ## Writing Playbook
 ### Generate ssh key:
